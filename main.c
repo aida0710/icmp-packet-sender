@@ -22,14 +22,26 @@ struct icmp_echo_request {
 USHORT calculate_checksum(USHORT* buffer, int size) {
     unsigned long cksum = 0;
     while (size > 1) {
+        // 16ビットごとに加算
         cksum += *buffer++;
+        // バッファのサイズを減らす
         size -= sizeof(USHORT);
     }
+
+    // バッファが1バイト以上ある場合は最後の1バイトを加算
     if (size) {
+        // バッファが奇数の場合は最後の1バイトを加算
         cksum += *(UCHAR *)buffer;
     }
+
+    // 32ビットの加算結果を16ビットに折り返す
     cksum = (cksum >> 16) + (cksum & 0xffff);
+    //printf("cksum=%lx\n", ~cksum);
+    // さらに16ビットの加算結果を16ビットに折り返す
     cksum += cksum >> 16;
+    //printf("cksum=%lx\n", ~cksum);
+
+    //最後にビット反転
     return ~cksum;
 }
 
