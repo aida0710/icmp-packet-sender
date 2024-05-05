@@ -135,6 +135,7 @@ int main(const int argc, char* argv[]) {
             exit(1);
         }
     }
+
     // 回数を文字列から整数に変換
     const int count = atoi(argv[2]);
 
